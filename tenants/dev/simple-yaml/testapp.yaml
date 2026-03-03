@@ -1,0 +1,5 @@
+name: testapp
+namespace: dev
+image: containous/whoami:latest
+port: 80
+replicas: 1
