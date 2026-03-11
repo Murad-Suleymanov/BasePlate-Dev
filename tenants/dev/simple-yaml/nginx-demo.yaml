@@ -1,5 +1,0 @@
-name: nginx-demo
-namespace: dev
-image: nginxdemos/hello:plain-text
-port: 80
-replicas: 1

@@ -1,7 +1,0 @@
-name: echo
-namespace: dev
-repo: ealen/echo-server
-tag: "latest"
-port: 8080
-containerPort: 80
-replicas: 1
