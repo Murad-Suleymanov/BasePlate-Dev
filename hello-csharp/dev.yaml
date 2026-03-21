@@ -1,6 +1,6 @@
 repo: https://github.com/Murad-Suleymanov/hello-csharp
 hpa:
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 3
 resources:
   requests:
