@@ -1,0 +1,12 @@
+repo: https://github.com/Murad-Suleymanov/hello-python
+hpa:
+  minReplicas: 2
+  maxReplicaes: 3
+resources:
+  requests:
+    memory: 200Mi
+    cpu: 100m
+  limits:
+    memory: 250Mi
+    cpu: 150m
+  
