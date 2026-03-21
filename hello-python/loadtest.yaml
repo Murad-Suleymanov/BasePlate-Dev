@@ -1,3 +1,0 @@
-repo: https://github.com/Murad-Suleymanov/hello-python
-minReplicas: 1
-maxReplicas: 2
