@@ -1,3 +1,4 @@
 repo: https://github.com/Murad-Suleymanov/hello-nodejs
-minReplicas: 2
-maxReplicas: 3
+hpa:
+  minReplicas: 2
+  maxReplicas: 3
