@@ -1,0 +1,12 @@
+repo: https://github.com/Murad-Suleymanov/hello-nodejs
+hpa:
+  minReplicas: 2
+  maxReplicas: 3
+
+traffic:
+  rateLimit:
+    enabled: true
+    mode: local
+    local:
+      requestsPerSecond: 100
+      burst: 20
