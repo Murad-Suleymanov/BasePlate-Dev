@@ -9,3 +9,11 @@ resources:
   limits:
     memory: 250Mi
     cpu: 150m
+
+traffic:
+  rateLimit:
+    enabled: true
+    mode: local
+    local:
+      requestsPerSecond: 100
+      burst: 20
