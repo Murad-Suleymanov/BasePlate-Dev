@@ -17,3 +17,7 @@ traffic:
     local:
       requestsPerSecond: 100
       burst: 20
+
+canary:
+  enabled: true
+  weight: 10
