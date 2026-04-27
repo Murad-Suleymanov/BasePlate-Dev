@@ -17,3 +17,9 @@ traffic:
     local:
       requestsPerSecond: 100
       burst: 20
+
+readinessProbe:
+  path: /Health
+
+livenessProbe:
+  path: /Health
