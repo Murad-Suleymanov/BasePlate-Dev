@@ -10,6 +10,9 @@ resources:
     memory: 250Mi
     cpu: 150m
 
+traffic: 
+  provider: istio
+
 readinessProbe:
   path: /health
 
