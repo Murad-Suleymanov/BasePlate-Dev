@@ -1,0 +1,102 @@
+name: Validate BirService values
+
+on:
+  pull_request:
+    paths:
+      - "**/dev.yaml"
+      - "**/prod.yaml"
+      - ".pre-commit-config.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "**/dev.yaml"
+      - "**/prod.yaml"
+      - ".pre-commit-config.yaml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: write   # sticky comment yazmaq üçün
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python (pre-commit)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.0
+
+      - name: Setup yq
+        shell: bash
+        run: |
+          sudo wget -qO /usr/local/bin/yq \
+            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run validation
+        id: validate
+        shell: bash
+        run: |
+          set +e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+            pre-commit run --from-ref "$base" --to-ref "$head" --show-diff-on-failure 2>&1 | tee /tmp/validate.log
+          else
+            pre-commit run --all-files --show-diff-on-failure 2>&1 | tee /tmp/validate.log
+          fi
+          code=${PIPESTATUS[0]}
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      - name: Build sticky comment body
+        if: failure() && github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          {
+            echo "### ⛔ BirService validation səhvləri"
+            echo ""
+            echo "Bu PR-da bir və ya bir neçə tenant values faylında problem var. Aşağıdakı səhvləri düzəlt və yenidən push et."
+            echo ""
+            echo "<details><summary>Tam çıxış (klik aç)</summary>"
+            echo ""
+            echo '```'
+            # ANSI escape kodlarını təmizlə (terminal rəngləri Markdown-da pis görünür)
+            sed -r "s/\x1B\[[0-9;]*[mK]//g" /tmp/validate.log | tail -200
+            echo '```'
+            echo ""
+            echo "</details>"
+            echo ""
+            echo "**Sürətli düzəliş təlimatı:**"
+            echo "1. \`pre-commit install\` lokal commit-də eyni səhvi tutar (artıq düzəldilib gəlir)."
+            echo "2. Schema sənədi: [charts/birservice/values.schema.json](https://github.com/Murad-Suleymanov/BasePlate/blob/main/charts/birservice/values.schema.json)"
+            echo "3. Semantic qaydalar: [scripts/birservice-lint.sh](https://github.com/Murad-Suleymanov/BasePlate/blob/main/scripts/birservice-lint.sh)"
+          } > /tmp/comment.md
+
+      - name: Post / update sticky PR comment
+        if: failure() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: birservice-validate
+          path: /tmp/comment.md
+
+      - name: Remove sticky comment on success
+        if: success() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: birservice-validate
+          delete: true

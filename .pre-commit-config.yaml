@@ -1,0 +1,13 @@
+# Pre-commit hooks for BirService tenant values.yaml.
+# Setup (one-time per clone):
+#   pip install pre-commit && pre-commit install
+# Runs automatically on every `git commit` against staged dev.yaml/prod.yaml files.
+# Same hooks are also executed by the validate.yml GitHub Actions workflow on every PR,
+# so there is no drift between local and CI validation.
+repos:
+  - repo: https://github.com/Murad-Suleymanov/BasePlate
+    # Pin to main for now; switch to a tag (e.g. v0.1.0) once BasePlate cuts releases.
+    rev: main
+    hooks:
+      - id: birservice-lint
+      - id: birservice-helm-validate
