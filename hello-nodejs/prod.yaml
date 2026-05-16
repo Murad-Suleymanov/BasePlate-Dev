@@ -6,3 +6,6 @@ hpa:
 traffic:
   provider: istio
   ejectUnhealthy: false
+
+singleton: true
+maxDown: 1
