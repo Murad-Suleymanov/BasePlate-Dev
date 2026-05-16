@@ -68,23 +68,23 @@ jobs:
         shell: bash
         run: |
           {
-            echo "### ⛔ BirService validation səhvləri"
+            echo "### ⛔ BirService validation failed"
             echo ""
-            echo "Bu PR-da bir və ya bir neçə tenant values faylında problem var. Aşağıdakı səhvləri düzəlt və yenidən push et."
+            echo "One or more tenant values files in this PR have problems. Fix the issues below and push again."
             echo ""
-            echo "<details><summary>Tam çıxış (klik aç)</summary>"
+            echo "<details><summary>Full output (click to expand)</summary>"
             echo ""
             echo '```'
-            # ANSI escape kodlarını təmizlə (terminal rəngləri Markdown-da pis görünür)
+            # Strip ANSI escape codes so terminal colors don't garble the markdown.
             sed -r "s/\x1B\[[0-9;]*[mK]//g" /tmp/validate.log | tail -200
             echo '```'
             echo ""
             echo "</details>"
             echo ""
-            echo "**Sürətli düzəliş təlimatı:**"
-            echo "1. \`pre-commit install\` lokal commit-də eyni səhvi tutar (artıq düzəldilib gəlir)."
-            echo "2. Schema sənədi: [charts/birservice/values.schema.json](https://github.com/Murad-Suleymanov/BasePlate/blob/main/charts/birservice/values.schema.json)"
-            echo "3. Semantic qaydalar: [scripts/birservice-lint.sh](https://github.com/Murad-Suleymanov/BasePlate/blob/main/scripts/birservice-lint.sh)"
+            echo "**How to fix quickly:**"
+            echo "1. Install \`pre-commit\` locally to catch the same errors before pushing: \`pip install pre-commit && pre-commit install\`."
+            echo "2. Schema reference: [charts/birservice/values.schema.json](https://github.com/Murad-Suleymanov/BasePlate/blob/main/charts/birservice/values.schema.json)"
+            echo "3. Semantic rules: [scripts/birservice-lint.sh](https://github.com/Murad-Suleymanov/BasePlate/blob/main/scripts/birservice-lint.sh)"
           } > /tmp/comment.md
 
       - name: Post / update sticky PR comment
