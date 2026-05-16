@@ -5,3 +5,8 @@ hpa:
 
 traffic:
   provider: istio
+  ejectUnhealthy: false
+  latencyAware: true
+
+singleton: true
+maxDown: 1
