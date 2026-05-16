@@ -16,7 +16,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write   # sticky comment yazmaq üçün
+  pull-requests: write   # required to post the sticky validation comment
 
 jobs:
   validate:
