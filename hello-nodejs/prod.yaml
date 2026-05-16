@@ -5,3 +5,4 @@ hpa:
 
 traffic:
   provider: istio
+  ejectUnhealthy: false
