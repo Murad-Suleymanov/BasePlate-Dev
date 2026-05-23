@@ -1,7 +1,7 @@
 {
-  "_comment": "Maps every */dev.yaml and */prod.yaml in this repo to the BirService chart schema so new tenant files get IDE validation automatically — no per-file $schema comment needed. The relative path assumes BasePlate is checked out as a sibling folder (workspace layout: <root>/BasePlate, <root>/BasePlate-Dev). If you clone only this repo, switch to the URL form once the schema is published to main: replace the key with https://raw.githubusercontent.com/Murad-Suleymanov/BasePlate/main/charts/birservice/values.schema.json",
+  "_comment": "Maps every */dev.yaml and */prod.yaml in this repo to the BirService chart schema so new tenant files get IDE validation automatically — no per-file $schema comment needed. Uses the GitHub raw URL so contributors who clone only BasePlate-Dev get validation without needing BasePlate locally. Requires the Red Hat YAML extension (redhat.vscode-yaml) and BasePlate-Dev opened as the workspace root.",
   "yaml.schemas": {
-    "../BasePlate/charts/birservice/values.schema.json": [
+    "https://raw.githubusercontent.com/Murad-Suleymanov/BasePlate/main/charts/birservice/values.schema.json": [
       "*/dev.yaml",
       "*/prod.yaml"
     ]
