@@ -1,4 +1,3 @@
-repo: https://github.com/Murad-Suleymanov/hello-python
 hpa:
   minReplicas: 1
   maxReplicas: 2
