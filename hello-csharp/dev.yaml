@@ -6,5 +6,8 @@ resources:
     memory: 200Mi
     cpu: 100m
   limits:
-    memory: 250Mi
+    memory: salam
     cpu: 150m
+
+traffic:
+  provider: istio
