@@ -97,24 +97,33 @@ cat > "$HOOKS_DIR/pre-commit" <<'HOOK'
 # Shared pre-commit hook — installed machine-wide by BasePlate-Dev/install-hooks.sh.
 # No-op for repos that don't use pre-commit.
 if [ -f ".pre-commit-config.yaml" ]; then
-  if ! command -v pre-commit >/dev/null 2>&1; then
-    # Self-heal: scan pip --user script dirs in case PATH wasn't refreshed.
-    _add_to_path() { [ -d "$1" ] && PATH="$1:$PATH" && export PATH; }
-    _add_to_path "$HOME/.local/bin"
-    for d in "$HOME"/Library/Python/*/bin; do _add_to_path "$d"; done
-    # Windows: $APPDATA / $LOCALAPPDATA use backslashes — convert for bash glob.
-    for win_env in "${APPDATA:-}" "${LOCALAPPDATA:-}"; do
-      [ -z "$win_env" ] && continue
-      if command -v cygpath >/dev/null 2>&1; then
-        unix_env=$(cygpath -u "$win_env")
-      else
-        unix_env=$(echo "$win_env" | sed -e 's|\\|/|g' -e 's|^\([A-Za-z]\):|/\L\1|')
-      fi
-      for d in "$unix_env"/Python/Python*/Scripts "$unix_env"/Programs/Python/Python*/Scripts; do
-        _add_to_path "$d"
-      done
+  # Self-heal PATH: pre-commit itself + tools downstream hooks invoke (yq, helm, ...).
+  # Stale terminals or fresh-clone shells often miss these; rather than ask devs to
+  # reopen their shell, we scan the canonical install locations and prepend any
+  # that exist. Safe no-op on Linux/macOS where the dirs don't exist.
+  _add_to_path() { [ -d "$1" ] && PATH="$1:$PATH" && export PATH; }
+  _to_unix() {
+    if command -v cygpath >/dev/null 2>&1; then
+      cygpath -u "$1"
+    else
+      echo "$1" | sed -e 's|\\|/|g' -e 's|^\([A-Za-z]\):|/\L\1|'
+    fi
+  }
+  # pip --user installs (pre-commit itself lives here)
+  _add_to_path "$HOME/.local/bin"
+  for d in "$HOME"/Library/Python/*/bin; do _add_to_path "$d"; done
+  # Windows: pip --user + winget package dirs (yq, helm, etc.)
+  for win_env in "${APPDATA:-}" "${LOCALAPPDATA:-}"; do
+    [ -z "$win_env" ] && continue
+    unix_env=$(_to_unix "$win_env")
+    for d in \
+      "$unix_env"/Python/Python*/Scripts \
+      "$unix_env"/Programs/Python/Python*/Scripts \
+      "$unix_env"/Microsoft/WinGet/Packages/*/ \
+      "$unix_env"/Microsoft/WinGet/Packages/*/windows-amd64; do
+      _add_to_path "$d"
     done
-  fi
+  done
   exec pre-commit run --hook-stage commit
 fi
 HOOK
