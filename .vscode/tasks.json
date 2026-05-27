@@ -4,8 +4,22 @@
     {
       "label": "auto-install pre-commit hooks",
       "type": "shell",
-      "command": "${workspaceFolder}/install-hooks.sh",
+      "command": "bash",
+      "args": ["${workspaceFolder}/install-hooks.sh"],
       "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy", "Bypass",
+          "-Command",
+          "$candidates = @(\"$env:ProgramFiles\\Git\\bin\\bash.exe\", \"${env:ProgramFiles(x86)}\\Git\\bin\\bash.exe\", \"$env:LOCALAPPDATA\\Programs\\Git\\bin\\bash.exe\"); $bash = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1; if (-not $bash) { Write-Host 'ERROR: Git Bash not found. Install Git for Windows: https://git-scm.com/download/win' -ForegroundColor Red; exit 1 }; & $bash '${workspaceFolder}/install-hooks.sh'; exit $LASTEXITCODE"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/install-hooks.sh"]
+      },
+      "linux": {
         "command": "bash",
         "args": ["${workspaceFolder}/install-hooks.sh"]
       },
