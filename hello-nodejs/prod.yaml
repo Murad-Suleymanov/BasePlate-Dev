@@ -3,7 +3,7 @@ hpa:
   minReplicas: 2
   maxReplicas: 3
 
-traffic:
+trafc:
   provider: istio
   ejectUnhealthy: false
   latencyAware: true
