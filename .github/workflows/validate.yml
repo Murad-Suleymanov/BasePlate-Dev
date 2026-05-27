@@ -3,12 +3,14 @@ name: Validate BirService values
 on:
   pull_request:
     paths:
+      - "**/service.yaml"
       - "**/dev.yaml"
       - "**/prod.yaml"
       - ".pre-commit-config.yaml"
   push:
     branches: [main]
     paths:
+      - "**/service.yaml"
       - "**/dev.yaml"
       - "**/prod.yaml"
       - ".pre-commit-config.yaml"
