@@ -9,5 +9,5 @@ resources:
     memory: salam
     cpu: 150m
 
-traffecs:
+traffic:
   provider: istio
