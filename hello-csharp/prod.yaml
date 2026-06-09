@@ -25,8 +25,8 @@ main:
     path: /Health
 
 
-slave:
-  inheritFrom: main
-  # Identical to main except this one property (deep-merged override).
-  hpa:
-    maxReplicas: 4
+testing:
+  inheritFrom: main        # main-in bütün konfiqi
+  route:
+    shareWith: main        # öz host-u yox; main-in host-una (hello-csharp-main-prod) qoşul
+    pathPrefix: /testing   # yalnız /testing → testing; qalan hər şey → main

@@ -56,6 +56,25 @@ slave:
 
 Use `inheritFrom: <instance>` to avoid duplicating a near-identical instance: it copies the named sibling's full config and lets you override just the fields you declare. The target must be a sibling in the same file and must not itself use `inheritFrom` (no chains). Omit it and each instance is fully independent, as before.
 
+### One hostname for several instances
+
+By default each instance gets its own DNS name. To route two instances through **one** hostname, a child joins the parent's route with `route.shareWith` + `route.pathPrefix`:
+
+```yaml
+# hello-csharp/prod.yaml
+main:
+  hpa: {minReplicas: 1, maxReplicas: 2}
+  resources: ...
+  traffic: ...
+testing:
+  inheritFrom: main
+  route:
+    shareWith: main        # use main's host (hello-csharp-main-<env>)
+    pathPrefix: /testing   # only /testing → testing; everything else → main
+```
+
+→ one HTTPRoute on `hello-csharp-main-<env>`: `/testing` → `hello-csharp-testing-svc`, `/` → `hello-csharp-main-svc`. The child has no route of its own. Omit `pathPrefix` and set `weight: <0-100>` instead for a blue/green percentage split. The parent must not itself use `route.shareWith`, and a child must not set its own `hostname`.
+
 See [BasePlate/docs/user-guide/yaml-reference.md](https://github.com/Murad-Suleymanov/BasePlate/blob/main/docs/user-guide/yaml-reference.md) for the full field reference.
 
 ## Bypassing hooks (rarely needed)
