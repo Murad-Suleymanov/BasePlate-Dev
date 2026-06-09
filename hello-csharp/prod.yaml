@@ -26,27 +26,7 @@ main:
 
 
 slave:
+  inheritFrom: main
+  # Identical to main except this one property (deep-merged override).
   hpa:
-    minReplicas: 1
-    maxReplicas: 2
-  resources:
-    requests:
-      memory: 200Mi
-      cpu: 100m
-    limits:
-      memory: 250Mi
-      cpu: 150m
-
-  traffic:
-    rateLimit:
-      enabled: true
-      mode: local
-      local:
-        requestsPerSecond: 100
-        burst: 20
-
-  readinessProbe:
-    path: /Health
-
-  livenessProbe:
-    path: /Health
+    maxReplicas: 4

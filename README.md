@@ -48,12 +48,13 @@ main:
   resources: ...
   traffic: ...
 slave:
-  hpa: {minReplicas: 1, maxReplicas: 2}
-  resources: ...
-  traffic: ...
+  inheritFrom: main      # copy main's whole config…
+  hpa: {maxReplicas: 4}  # …override only this leaf (deep merge)
 ```
 
 → 2 BirServices `hello-csharp-main` + `hello-csharp-slave`, 2 Services. Shared service-level fields (`repo`, `owner`) inherited from `service.yaml`.
+
+Use `inheritFrom: <instance>` to avoid duplicating a near-identical instance: it copies the named sibling's full config and lets you override just the fields you declare. The target must be a sibling in the same file and must not itself use `inheritFrom` (no chains). Omit it and each instance is fully independent, as before.
 
 See [BasePlate/docs/user-guide/yaml-reference.md](https://github.com/Murad-Suleymanov/BasePlate/blob/main/docs/user-guide/yaml-reference.md) for the full field reference.
 
