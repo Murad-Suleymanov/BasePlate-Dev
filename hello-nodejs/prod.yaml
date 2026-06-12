@@ -1,7 +1,3 @@
-hpa:
-  minReplicas: 2
-  maxReplicas: 3
-
 traffic:
   provider: istio
   ejectUnhealthy: false
