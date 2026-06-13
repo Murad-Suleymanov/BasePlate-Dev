@@ -1,11 +1,11 @@
-main:
-  hostnames:
-    - hello-nodejs-extra.easysolution.work
-    - hello-nodejs-ultra-extra.easysolution.work
-  traffic:
-    provider: istio
-    ejectUnhealthy: false
-    latencyAware: true
-  
-  singleton: true
-  maxDown: 1
+
+hostnames:
+  - hello-nodejs-extra.easysolution.work
+  - hello-nodejs-ultra-extra.easysolution.work
+traffic:
+  provider: istio
+  ejectUnhealthy: false
+  latencyAware: true
+
+singleton: true
+maxDown: 1
