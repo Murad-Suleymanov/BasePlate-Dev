@@ -1,7 +1,7 @@
 main:
   hostnames:
-    - hello-python-extra.esaylotuion.work
-    - hello-python-ultra-extra.esaysolution.work
+    - hello-python-extra.easysolution.work
+    - hello-python-ultra-extra.easysolution.work
     
   hpa:
     minReplicas: 1
