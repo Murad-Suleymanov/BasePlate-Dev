@@ -1,4 +1,4 @@
-main:
+main:&main
   hpa:
     minReplicas: 1
     maxReplicas: 2
@@ -25,7 +25,7 @@ main:
     path: /Health
 
 
-testing:
+testing:&main
   inheritFrom: main        # main-in bütün konfiqi
   route:
     shareWith: main        # öz host-u yox; main-in host-una (hello-csharp-main-prod) qoşul
