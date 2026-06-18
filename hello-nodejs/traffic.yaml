@@ -1,0 +1,2 @@
+hello-nodejs.main:
+  timeout: 3000ms
