@@ -1,4 +1,5 @@
 main:&main
+  route: hello-csharp.main 
   hpa:
     minReplicas: 1
     maxReplicas: 2
@@ -27,6 +28,4 @@ main:&main
 
 testing:&main
   inheritFrom: main        # main-in bütün konfiqi
-  route:
-    shareWith: main        # öz host-u yox; main-in host-una (hello-csharp-main-prod) qoşul
-    pathPrefix: /testing   # yalnız /testing → testing; qalan hər şey → main
+  route: hello-csharp.main  
