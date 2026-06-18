@@ -1,4 +1,6 @@
-
+routes:
+  - hello-nodejs.main
+  - hello-nodejs.main_long_timeout
 hostnames:
   - hello-nodejs-extra.easysolution.work
   - hello-nodejs-ultra-extra.easysolution.work
