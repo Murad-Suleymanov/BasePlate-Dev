@@ -1,6 +1,7 @@
 hpa:
   minReplicas: 1
   maxReplicas: 3
+  targetRPS: 100
 resources:
   requests:
     memory: 200Mi
@@ -8,3 +9,5 @@ resources:
   limits:
     memory: 250Mi
     cpu: 150m
+traffic:
+  provider: istio
