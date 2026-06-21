@@ -3,3 +3,5 @@
 _routes:
   main:
     timeout: 15s
+  main-long-timeout:
+    timeout: 120s
