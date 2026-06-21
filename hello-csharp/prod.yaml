@@ -1,5 +1,7 @@
 main: &main
-  route: main                  # serves route "main" (policy in routes.yaml) and owns the pool
+  routes:
+    - main
+    - main-long-timeout  # serves route "main" (policy in routes.yaml) and owns the pool
   hpa:
     minReplicas: 1
     maxReplicas: 2
