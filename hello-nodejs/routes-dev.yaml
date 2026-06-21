@@ -1,0 +1,6 @@
+# Route catalog for hello-nodejs on the DEV cluster.
+_routes:
+  main:
+    timeout: 15s
+  main-long-timeout:
+    timeout: 120s

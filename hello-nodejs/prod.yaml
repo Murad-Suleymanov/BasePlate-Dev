@@ -1,9 +1,6 @@
 routes:
-  - hello-nodejs.main
-  - hello-nodejs.main_long_timeout
-hostnames:
-  - hello-nodejs-extra.easysolution.work
-  - hello-nodejs-ultra-extra.easysolution.work
+  - main                       # normal route (15s) — also the pool's primary route
+  - main-long-timeout          # same pool, separate HTTPRoute with a 120s timeout
 traffic:
   provider: istio
   ejectUnhealthy: false

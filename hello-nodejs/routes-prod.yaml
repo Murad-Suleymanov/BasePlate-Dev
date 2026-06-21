@@ -1,0 +1,8 @@
+# Route catalog for hello-nodejs on the PROD cluster. One pod pool exposed under two
+# routes with different timeouts (hostnames auto-derived: the primary gets the service
+# host, main-long-timeout gets <name>-main-long-timeout-<env>).
+_routes:
+  main:
+    timeout: 15s
+  main-long-timeout:
+    timeout: 120s

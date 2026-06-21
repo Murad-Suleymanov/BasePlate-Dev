@@ -1,4 +1,5 @@
 main: &main
+  route: main                  # serves route "main" (policy in routes.yaml) and owns the pool
   hpa:
     minReplicas: 1
     maxReplicas: 2
@@ -25,9 +26,7 @@ main: &main
   livenessProbe:
     path: /Health
 
-# testing = main's full config (native YAML merge), it only joins main's hostname.
+# testing inherits main's full config (and its `route: main`), so its pods join the
+# SAME pool — one Service load-balances across main + testing pods. No separate route.
 testing:
   <<: *main
-  route:
-    shareWith: main      # use main's host
-    pathPrefix: /testing # /testing → testing, everything else → main

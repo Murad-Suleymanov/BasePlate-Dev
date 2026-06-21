@@ -1,0 +1,4 @@
+# Route catalog for hello-csharp on the DEV cluster. Flat: route name -> policy.
+_routes:
+  main:
+    timeout: 30s

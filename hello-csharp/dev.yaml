@@ -1,3 +1,4 @@
+route: main
 hpa:
   minReplicas: 1
   maxReplicas: 3
