@@ -1,8 +1,8 @@
-main:&main
-  route: hello-csharp.main 
+main: &main
   hpa:
     minReplicas: 1
     maxReplicas: 2
+    targetRPS: 100
   resources:
     requests:
       memory: 200Mi
@@ -25,7 +25,9 @@ main:&main
   livenessProbe:
     path: /Health
 
-
-testing:&main
-  inheritFrom: main        # main-in bütün konfiqi
-  route: hello-csharp.main  
+# testing = main's full config (native YAML merge), it only joins main's hostname.
+testing:
+  <<: *main
+  route:
+    shareWith: main      # use main's host
+    pathPrefix: /testing # /testing → testing, everything else → main
