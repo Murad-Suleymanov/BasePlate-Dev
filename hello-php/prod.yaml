@@ -11,9 +11,14 @@ main:
     scaleType: worker
     target: 70
 
-  # Required for the worker signal: enables the Prometheus ServiceMonitor so the
-  # php-fpm_exporter metrics on /metrics are scraped.
-  metrics: true
+  # Required for the worker signal. This is the scrape endpoint: the operator
+  # creates a ServiceMonitor that scrapes the workload's http port (containerPort)
+  # at `path`. So the app MUST serve php-fpm_exporter output (phpfpm_active_processes,
+  # phpfpm_total_processes) at this path on its own http port — the operator scrapes
+  # only the http port, not a separate exporter port.
+  metrics:
+    enabled: true
+    path: /metrics
 
   resources:
     requests:
