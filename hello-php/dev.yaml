@@ -1,0 +1,15 @@
+# Dev: scale on CPU utilization (always available via metrics-server).
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  scaleType: cpu
+  target: 70
+resources:
+  requests:
+    memory: 128Mi
+    cpu: 100m
+  limits:
+    memory: 256Mi
+    cpu: 200m
+traffic:
+  provider: istio

@@ -1,0 +1,28 @@
+main:
+  # Single scaling signal. Pick the type the platform resolves the metric for:
+  #   cpu / memory — utilization %, served by metrics-server.
+  #   rps          — Istio requests/sec per pod (integer); needs traffic.
+  #   worker       — worker-pool saturation % (100×busy/max); needs metrics. A
+  #                  central recording rule normalizes per-runtime worker gauges
+  #                  into app_worker_utilization, so this is language-agnostic.
+  hpa:
+    minReplicas: 2
+    maxReplicas: 10
+    scaleType: worker
+    target: 70
+
+  # Required for the worker signal: enables the Prometheus ServiceMonitor so the
+  # php-fpm_exporter metrics on /metrics are scraped.
+  metrics: true
+
+  resources:
+    requests:
+      memory: 200Mi
+      cpu: 150m
+    limits:
+      memory: 300Mi
+      cpu: 250m
+
+  # Required only for the rps signal (kept here so switching scaleType: rps works).
+  traffic:
+    provider: istio
