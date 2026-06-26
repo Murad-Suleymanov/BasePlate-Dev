@@ -107,6 +107,34 @@ _routes: {}               # main inherits 30s unchanged — nothing to override
 and the env file are both optional, so an app can ship only `routes-<env>.yaml` (no
 base) or only `routes.yaml` (identical on every cluster).
 
+### Choosing a node pool
+
+By default every workload schedules onto the shared **default** nodes. To pin a
+service to a dedicated node pool, set `pool:`:
+
+```yaml
+# hello-csharp/prod.yaml
+pool: system        # schedule on the 'system' pool's nodes; omit → default
+```
+
+- Put `pool` in `service.yaml` to apply it on every cluster, or in `<env>.yaml`
+  for one cluster only (file-level inheritance — env overrides base).
+- Multi-instance: set `pool` per instance, or once at service level and let
+  instances inherit it (override per instance as needed):
+
+  ```yaml
+  # prod.yaml
+  main:
+    pool: system
+  batch:
+    pool: data        # different pool for the batch instance
+  ```
+
+The platform injects the pool's `nodeSelector` + tolerations automatically. The
+pool name **must** match an existing pool (`kubectl get pools` to list them) —
+a typo blocks the deploy and shows `NodePoolError` in the BirService status
+rather than silently landing on the default nodes.
+
 See [BasePlate/docs/user-guide/yaml-reference.md](https://github.com/Murad-Suleymanov/BasePlate/blob/main/docs/user-guide/yaml-reference.md) for the full field reference.
 
 ## Bypassing hooks (rarely needed)
