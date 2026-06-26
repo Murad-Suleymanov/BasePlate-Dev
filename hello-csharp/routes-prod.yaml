@@ -1,7 +1,0 @@
-# Route catalog for hello-csharp on the PROD cluster. Flat: route name -> policy.
-# Hostnames are auto-derived by the platform per cluster, so only policy lives here.
-_routes:
-  main:
-    timeout: 15s
-  main-long-timeout:
-    timeout: 120s

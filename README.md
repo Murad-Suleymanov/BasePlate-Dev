@@ -4,6 +4,11 @@ Tenant values for BirService deployments. Each subfolder is one service; inside 
 
 - `service.yaml` — shared metadata for the service (`repo`, `owner`, optionally `image`/`tag`)
 - `<env>.yaml` (e.g. `dev.yaml`, `prod.yaml`) — environment-specific config (single-instance or multi-instance shape)
+- `routes.yaml` (optional) — base route catalog common to every cluster
+- `routes-<env>.yaml` (optional) — per-cluster route overrides, layered on top of `routes.yaml`
+
+**File-level inheritance.** Files are loaded base → override and deep-merged, so a child file only declares what differs:
+`service.yaml` ⊕ `<env>.yaml` for config, and `routes.yaml` ⊕ `routes-<env>.yaml` for routes. Any of the layered files is optional.
 
 ## Validation — runs automatically, no manual steps
 
@@ -74,6 +79,33 @@ testing:
 ```
 
 → one HTTPRoute on `hello-csharp-main-<env>`: `/testing` → `hello-csharp-testing-svc`, `/` → `hello-csharp-main-svc`. The child has no route of its own. Omit `pathPrefix` and set `weight: <0-100>` instead for a blue/green percentage split. The parent must not itself use `route.shareWith`, and a child must not set its own `hostname`.
+
+### Route catalog with a shared base
+
+Route policies (timeout, retries, …) live in a `_routes` map. Put what's common to
+every cluster in `routes.yaml`; let each `routes-<env>.yaml` override only the leaves
+that differ or add cluster-only routes. The files deep-merge, env on top of base:
+
+```yaml
+# hello-csharp/routes.yaml          (base — all clusters)
+_routes:
+  main:
+    timeout: 30s
+
+# hello-csharp/routes-prod.yaml     (prod override)
+_routes:
+  main:
+    timeout: 15s          # tighter than the 30s base
+  main-long-timeout:      # prod-only route, not in the base
+    timeout: 120s
+
+# hello-csharp/routes-dev.yaml      (dev override)
+_routes: {}               # main inherits 30s unchanged — nothing to override
+```
+
+→ prod sees `main` (15s) + `main-long-timeout` (120s); dev sees `main` (30s). The base
+and the env file are both optional, so an app can ship only `routes-<env>.yaml` (no
+base) or only `routes.yaml` (identical on every cluster).
 
 See [BasePlate/docs/user-guide/yaml-reference.md](https://github.com/Murad-Suleymanov/BasePlate/blob/main/docs/user-guide/yaml-reference.md) for the full field reference.
 

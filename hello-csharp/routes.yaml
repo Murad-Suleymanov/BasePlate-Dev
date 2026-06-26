@@ -1,0 +1,10 @@
+# Base route catalog for hello-csharp — common to EVERY cluster.
+# Each per-cluster routes-<env>.yaml is deep-merged ON TOP of this file, so an
+# env file only declares the leaves that differ (e.g. a tighter timeout) or adds
+# routes that exist on that cluster alone. Flat: route name -> policy.
+# Hostnames are auto-derived by the platform per cluster, so only policy lives here.
+_routes:
+  main:
+    timeout: 30s
+  main-long-timeout:
+    timeout: 115s

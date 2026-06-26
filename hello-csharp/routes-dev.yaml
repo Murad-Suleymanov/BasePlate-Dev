@@ -1,4 +1,4 @@
-# Route catalog for hello-csharp on the DEV cluster. Flat: route name -> policy.
-_routes:
-  main:
-    timeout: 30s
+# DEV overrides, deep-merged on top of routes.yaml.
+# `main` inherits the 30s base unchanged and dev has no cluster-only routes,
+# so there is nothing to override here yet — add leaves below when dev diverges.
+_routes: {}
