@@ -5,6 +5,7 @@ hpa:
   # not message throughput — RPS is a weak scaling signal here. Consider CPU
   # (drop targetRPS) if connection/message load is the real bottleneck.
   targetRPS: 100
+  window: 2m       # smooth the bursty upgrade traffic over 2 minutes
 resources:
   requests:
     memory: 200Mi
