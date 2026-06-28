@@ -7,7 +7,7 @@ main:
     minReplicas: 1
     maxReplicas: 1
     targetRPS: 100
-    window: 15m
+    window: 10m
   resources:
     requests:
       memory: 200Mi
