@@ -1,3 +1,4 @@
+pool: payments
 hpa:
   minReplicas: 1
   maxReplicas: 1
