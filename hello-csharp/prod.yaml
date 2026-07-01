@@ -14,7 +14,7 @@ main: &main
       memory: 250Mi
       cpu: 150m
 
-  traffic:
+  trafficc:
     rateLimit:
       enabled: true
       mode: local
